@@ -133,12 +133,66 @@ export function countLettersAndDigits(input: string): number {
 export const calc = (str: string): number => {
   const seven = 7;
   const one = 1;
-  return str
-    .split("")
-    .map((s) => s.charCodeAt(0))
-    .join("")
-    .split("")
-    .filter(n=>+n===seven).length*(seven-one);
+  return (
+    str
+      .split("")
+      .map((s) => s.charCodeAt(0))
+      .join("")
+      .split("")
+      .filter((n) => +n === seven).length *
+    (seven - one)
+  );
 };
 
 // console.log(calc("ABC"));
+
+export function betterThanAverage(
+  classPoints: number[],
+  yourPoints: number
+): boolean {
+  let sum = 0;
+  classPoints.forEach((point) => (sum += point));
+  return sum / classPoints.length < yourPoints;
+}
+
+// console.log(betterThanAverage([2, 3], 5));
+
+export function alphanumeric(string: string): boolean {
+  if (string.length === 0) return false;
+  for (const letter of string) {
+    if (!letter.match(/[a-zA-Z0-9]/)) return false;
+  }
+  return true;
+}
+
+export function abbreviate(str: string): string {
+  const divisors = str.split(/[a-z\d]/i).filter((el) => el !== "");
+  if (divisors.length === 0) {
+    const len = str.length;
+    if (len < 4) return str;
+    else return `${str[0]}${len - 2}${str[len - 1]}`;
+  }
+  const uniqueDivisors = Array.from(new Set(divisors));
+  const regex = new RegExp(uniqueDivisors.join("|"));
+  const words = str.split(regex);
+  const abbrs: string[] = [];
+  for (const word of words) {
+    const len = word.length;
+    if (word !== "") {
+      if (len < 4) {
+        abbrs.push(`${word}${divisors[words.indexOf(word)]}`);
+      } else {
+        const divisor =
+          divisors.length !== words.indexOf(word)
+            ? divisors[words.indexOf(word)]
+            : "";
+        abbrs.push(`${word[0]}${len - 2}${word[len - 1]}${divisor}`);
+      }
+    }
+  }
+  return abbrs.join("");
+}
+
+//console.log(abbreviate("elephant-rides are really fun!"));
+//console.log(abbreviate("internationalization"));
+console.log(abbreviate("elephant-ride"));
